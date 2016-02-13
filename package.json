@@ -1,0 +1,29 @@
+{
+  "name": "nfc-e-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "body-parser": "^1.15.0",
+    "express-jwt": "^3.3.0",
+    "jwt-simple": "^0.4.1",
+    "htmlparser2": "^3.9.0",
+    "morgan": "^1.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/festrs/NFC-E-Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/festrs/NFC-E-Server/issues"
+  },
+  "homepage": "https://github.com/festrs/NFC-E-Server#readme"
+}
