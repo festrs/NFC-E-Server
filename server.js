@@ -81,7 +81,7 @@ app.all('/*', function(req, res, next) {
 // Any URL's that do not follow the below pattern should be avoided unless you 
 // are sure that authentication is not needed
 
-app.all('/api/v1/*', jwt({secret: 'shhhhhhared-secret',credentialsRequired: false}));
+app.all('/api/v1/*', jwt({secret: 'shhhhhhared-secret'}));
 
 app.get('/api/v1/qrdata', getAllDataFromQR);
 app.get('/qrdata', getAllDataFromQR);
