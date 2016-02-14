@@ -13,15 +13,18 @@ var arr = [];
 var record = false;
 var itemArray = [];
 var finalRecord = false;
-var options = {
-  hostname: 'www.sefaz.rs.gov.br',
-  port: 443,
-  path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43151007718633003447650010000813231001813234&HML=false&NF=1CA06FD1F',
-  method: 'GET'
-};
 
+var getAllDataFromQRTest = function(req, res){
 
-var getAllDataFromQR = function(req, res){
+  var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+req.body.listcode+"&HML=false&NF=1CA06FD1F";
+  
+  var options = {
+    hostname: 'www.sefaz.rs.gov.br',
+    port: 443,
+    path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43151007718633003447650010000813231001813234&HML=false&NF=1CA06FD1F',
+    method: 'GET'
+  };
+
   https.get(options, function(response) {
     var body = '';
     response.on('data', function(chunk) {
@@ -30,7 +33,37 @@ var getAllDataFromQR = function(req, res){
     response.on('end', function() {
       parser.write(body);
       var note = {
-        items : arr.slice(0,arr.length-5),
+        items : arr.slice(0,arr.length-4),
+        total : arr.slice(-4,arr.length)
+      };
+      res.json(note);
+      arr = [];
+    });
+  }).on('error', function(e) {
+    console.log("Got error: " + e.message);
+  }); 
+};
+
+var getAllDataFromQR = function(req, res){
+
+  var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+req.body.listcode+"&HML=false&NF=1CA06FD1F";
+
+  var options = {
+    hostname: 'www.sefaz.rs.gov.br',
+    port: 443,
+    path: path,
+    method: 'GET'
+  };
+
+  https.get(options, function(response) {
+    var body = '';
+    response.on('data', function(chunk) {
+      body += chunk;
+    });
+    response.on('end', function() {
+      parser.write(body);
+      var note = {
+        items : arr.slice(0,arr.length-4),
         total : arr.slice(-4,arr.length)
       };
       res.json(note);
@@ -43,7 +76,7 @@ var getAllDataFromQR = function(req, res){
 var parser = new htmlparser.Parser({
     onopentag: function(name, attribs){
         if(name === "td" && attribs.class === "NFCDetalhe_Item"){
-            record= true;
+            record = true;
         }
     },
     ontext: function(text){
@@ -81,10 +114,9 @@ app.all('/*', function(req, res, next) {
 // Any URL's that do not follow the below pattern should be avoided unless you 
 // are sure that authentication is not needed
 
-app.all('/api/v1/*', jwt({secret: 'shhhhhhared-secret'}));
-
-app.get('/api/v1/qrdata', getAllDataFromQR);
-app.get('/qrdata', getAllDataFromQR);
+app.all('/api/v1/*', jwt({secret: 'NFC-E-Company'}));
+app.get('/test/postqrdata', getAllDataFromQRTest);
+app.post('/api/v1/qrdata', getAllDataFromQR);
 
 // If no route is matched by now, it must be a 404
 app.use(function(err, req, res, next) {
