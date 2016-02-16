@@ -1,100 +1,12 @@
-var https = require('https');
-var htmlparser = require("htmlparser2");
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var jwt = require('express-jwt');
+var core = require('./core.js');
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
-
-var arr = [];
-var record = false;
-var itemArray = [];
-var finalRecord = false;
-
-var getAllDataFromQRTest = function(req, res){
-
-  var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+req.body.listcode+"&HML=false&NF=1CA06FD1F";
-  
-  var options = {
-    hostname: 'www.sefaz.rs.gov.br',
-    port: 443,
-    path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43151007718633003447650010000813231001813234&HML=false&NF=1CA06FD1F',
-    method: 'GET'
-  };
-
-  https.get(options, function(response) {
-    var body = '';
-    response.on('data', function(chunk) {
-      body += chunk;
-    });
-    response.on('end', function() {
-      parser.write(body);
-      var note = {
-        items : arr.slice(0,arr.length-4),
-        total : arr.slice(-4,arr.length)
-      };
-      res.json(note);
-      arr = [];
-    });
-  }).on('error', function(e) {
-    console.log("Got error: " + e.message);
-  }); 
-};
-
-var getAllDataFromQR = function(req, res){
-
-  var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+req.body.listcode+"&HML=false&NF=1CA06FD1F";
-
-  var options = {
-    hostname: 'www.sefaz.rs.gov.br',
-    port: 443,
-    path: path,
-    method: 'GET'
-  };
-
-  https.get(options, function(response) {
-    var body = '';
-    response.on('data', function(chunk) {
-      body += chunk;
-    });
-    response.on('end', function() {
-      parser.write(body);
-      var note = {
-        items : arr.slice(0,arr.length-4),
-        total : arr.slice(-4,arr.length)
-      };
-      res.json(note);
-      arr = [];
-    });
-  }).on('error', function(e) {
-    console.log("Got error: " + e.message);
-  }); 
-};
-var parser = new htmlparser.Parser({
-    onopentag: function(name, attribs){
-        if(name === "td" && attribs.class === "NFCDetalhe_Item"){
-            record = true;
-        }
-    },
-    ontext: function(text){
-        if(record){
-          itemArray.push(text);
-        }
-    },
-    onclosetag: function(tagname){
-        if(tagname === "td" && record == true){
-            record = false;
-        }
-        if(tagname === "tr"){
-          if(itemArray.length > 0)
-            arr.push(itemArray);
-          itemArray = [];
-        }
-    }
-}, {decodeEntities: true});
 
 
 app.all('/*', function(req, res, next) {
@@ -114,9 +26,9 @@ app.all('/*', function(req, res, next) {
 // Any URL's that do not follow the below pattern should be avoided unless you 
 // are sure that authentication is not needed
 
-app.all('/api/v1/*', jwt({secret: 'NFC-E-Company'}));
-app.get('/test/postqrdata', getAllDataFromQRTest);
-app.post('/api/v1/qrdata', getAllDataFromQR);
+app.all('/api/v1/*', jwt({secret: 'SupperDupperSecret'}));
+app.get('/test/postqrdata', core.getAllDataFromQRTest);
+app.post('/api/v1/qrdata', core.getAllDataFromQR);
 
 // If no route is matched by now, it must be a 404
 app.use(function(err, req, res, next) {
