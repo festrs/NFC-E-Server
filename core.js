@@ -44,7 +44,7 @@ var core = {
       path: path,
       method: 'GET'
     };
-
+    console.log(path);
     https.get(options, function(response) {
       var body = '';
       response.on('data', function(chunk) {
