@@ -12,4 +12,4 @@
 #
 # Services 
 # access /test/postqrdata method get no requirements 
-# access /api/v1/qrdata method post require listcode = chNFe security by JWT with the secret key SupperDupperSecret and exp date required.
+# access /api/v1/qrdata method post require listcode = chNFe security by JWT with the secret key SupperDupperSecret and exp date required.git 
