@@ -12,7 +12,7 @@ var core = {
     var options = {
       hostname: 'www.sefaz.rs.gov.br',
       port: 443,
-      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43151007718633003447650010000813231001813234&HML=false&NF=1CA06FD1F',
+      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43160245543915000777650690000656401110130918&HML=false&NF=1CA06FD1F',
       method: 'GET'
     };
 
@@ -23,9 +23,10 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
+        var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
         var note = {
-          items : arr.slice(0,arr.length-4),
-          total : arr.slice(-4,arr.length)
+          items : arr,
+          date : date
         };
         res.json(note);
         arr = [];
@@ -52,9 +53,10 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
+        var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
         var note = {
-          items : arr.slice(0,arr.length-4),
-          total : arr.slice(-4,arr.length)
+          items : arr,
+          date : date
         };
         res.json(note);
         arr = [];
