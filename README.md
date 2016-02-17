@@ -13,4 +13,4 @@ This web service receive the chNFe number for example 43160245543915000777650690
 Services <br />
 access /test/postqrdata method get no requirements <br />
 access /api/v1/qrdata method post require listcode = chNFe security by 
-JWT with the secret key SupperDupperSecret and exp date required.git 
+JWT with the secret key SupperDupperSecret and exp date required 
