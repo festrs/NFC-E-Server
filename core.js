@@ -122,7 +122,7 @@ function mapper(body){
     payments  : {vltotal: vltotal, vldesc: vldesc ,pagmethods: pagmethods},
     date      :  date
   }
-  return result;
+  return { nota : result};
 }
 
 module.exports = core;
