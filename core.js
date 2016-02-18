@@ -52,11 +52,7 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
-        var note = {
-          items : arr,
-          date : date
-        };
-        res.json(note);
+        res.json(mapper(body));
         arr = [];
       });
     }).on('error', function(e) {
