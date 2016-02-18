@@ -12,7 +12,7 @@ var core = {
     var options = {
       hostname: 'www.sefaz.rs.gov.br',
       port: 443,
-      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43160245543915000777650690000656401110130918&HML=false&NF=1CA06FD1F',
+      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43160245543915000777650120000485121886402924&HML=false&NF=1CA06FD1F',
       method: 'GET'
     };
 
@@ -23,12 +23,7 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
-        var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
-        var note = {
-          items : arr,
-          date : date
-        };
-        res.json(note);
+        res.json(mapper(body));
         arr = [];
       });
     }).on('error', function(e) {
@@ -37,6 +32,10 @@ var core = {
   },
 
   getAllDataFromQR: function(req, res){
+    var link = req.body.linkurl;
+    var chaveNFe = link.substring(link.search("?"),link.search("&"));
+    console.log(chaveNFe);
+
     var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+req.body.listcode+"&HML=false&NF=1CA06FD1F";
 
     var options = {
@@ -53,7 +52,6 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
-        var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
         var note = {
           items : arr,
           date : date
@@ -90,6 +88,45 @@ var parser = new htmlparser.Parser({
   }
 }, {decodeEntities: true});
 
-
+function mapper(body){
+  var items = [];
+  var pagmethods = [];
+  var vltotal;
+  var vldesc;
+  for (var i = arr.length - 1; i >= 0; i--) {
+    if(arr[i].length > 2){
+      if(arr[i].length == 6){
+        var item = {
+          code      : arr[i][0],
+          descricao : arr[i][1],
+          qtde      : arr[i][2],
+          un        : arr[i][3],
+          vlunit    : arr[i][4],
+          vltotal   : arr[i][5]
+        }
+        items.push(item);
+      }
+    }else{
+      if(arr[i].length == 2){
+        console.log(arr[i][0]);
+        if(arr[i][0].indexOf("Valor descontos") !=-1){
+          vldesc = arr[i][1];
+        } else if(arr[i][0].indexOf("Valor total") !=-1){
+          vltotal = arr[i][1];
+        }else if (arr[i][0] != "FORMA PAGAMENTO"){
+          pagmethods.push({ formapag : arr[i][0], valor: arr[i][1]});
+        }
+      }
+    }
+  }
+  //finish all mount the result json
+  var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
+  var result = {
+    items     :  items,
+    payments  : {vltotal: vltotal, vldesc: vldesc ,pagmethods: pagmethods},
+    date      :  date
+  }
+  return result;
+}
 
 module.exports = core;
