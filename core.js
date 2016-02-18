@@ -33,9 +33,9 @@ var core = {
 
   getAllDataFromQR: function(req, res){
     var link = req.body.linkurl;
-    //var chaveNFe = link.substring(link.search("?"),link.search("&"));
+    var chaveNFe = link.substring(link.search("="),link.search("&"));
     console.log(link);
-    console.log(link.substring("?"));
+    console.log(chaveNFe);
 
     var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+req.body.listcode+"&HML=false&NF=1CA06FD1F";
 
