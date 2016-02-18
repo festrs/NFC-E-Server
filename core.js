@@ -33,11 +33,8 @@ var core = {
 
   getAllDataFromQR: function(req, res){
     var link = req.body.linkurl;
-    var chaveNFe = link.substring(link.search("="),link.search("&"));
-    console.log(link);
-    console.log(chaveNFe);
-
-    var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+req.body.listcode+"&HML=false&NF=1CA06FD1F";
+    var chaveNFe = link.substring(link.search("=")+1,link.search("&"));
+    var path = "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe="+chaveNFe+"&HML=false&NF=1CA06FD1F";
 
     var options = {
       hostname: 'www.sefaz.rs.gov.br',
