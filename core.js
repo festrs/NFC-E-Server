@@ -9,6 +9,7 @@ var finalRecord = false;
 var core = {
 
   getAllDataFromQRTest: function(req, res){
+    var chaveNFe = "43160245543915000777650120000485121886402924";
     var options = {
       hostname: 'www.sefaz.rs.gov.br',
       port: 443,
@@ -23,7 +24,7 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
-        res.json(mapper(body));
+        res.json(mapper(body,chaveNFe));
         arr = [];
       });
     }).on('error', function(e) {
@@ -50,7 +51,7 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
-        res.json(mapper(body));
+        res.json(mapper(body, chaveNFe));
         arr = [];
       });
     }).on('error', function(e) {
@@ -82,7 +83,7 @@ var parser = new htmlparser.Parser({
   }
 }, {decodeEntities: true});
 
-function mapper(body){
+function mapper(body, chaveNFe){
   var items = [];
   var pagmethods = [];
   var vltotal;
@@ -91,24 +92,23 @@ function mapper(body){
     if(arr[i].length > 2){
       if(arr[i].length == 6){
         var item = {
-          code      : arr[i][0],
+          id        : arr[i][0],
           descricao : arr[i][1],
           qtde      : arr[i][2],
           un        : arr[i][3],
-          vlunit    : arr[i][4],
-          vltotal   : arr[i][5]
+          vl_unit    : arr[i][4],
+          vl_total   : arr[i][5]
         }
         items.push(item);
       }
     }else{
       if(arr[i].length == 2){
-        console.log(arr[i][0]);
         if(arr[i][0].indexOf("Valor descontos") !=-1){
           vldesc = arr[i][1];
         } else if(arr[i][0].indexOf("Valor total") !=-1){
           vltotal = arr[i][1];
         }else if (arr[i][0] != "FORMA PAGAMENTO"){
-          pagmethods.push({ formapag : arr[i][0], valor: arr[i][1]});
+          pagmethods.push({formapag : arr[i][0], valor: arr[i][1]});
         }
       }
     }
@@ -116,11 +116,12 @@ function mapper(body){
   //finish all mount the result json
   var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
   var result = {
-    items     :  items,
-    payments  : {vltotal: vltotal, vldesc: vldesc ,pagmethods: pagmethods},
-    date      :  date
+    id          :  chaveNFe,
+    items       :  items,
+    payments    :  {vl_total: vltotal, vl_desc: vldesc ,pag_metodo: pagmethods},
+    created_at  :  date
   }
-  return { nota : result};
+  return [result];
 }
 
 module.exports = core;
