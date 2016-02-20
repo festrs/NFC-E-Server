@@ -116,7 +116,7 @@ function mapper(body, chaveNFe){
   //finish all mount the result json
   var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
   var result = {
-    chaveNFe    :  chaveNFe,
+    id          :  chaveNFe,
     items       :  items,
     payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
     created_at  :  date
