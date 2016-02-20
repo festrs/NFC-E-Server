@@ -108,7 +108,7 @@ function mapper(body, chaveNFe){
         } else if(arr[i][0].indexOf("Valor total") !=-1){
           vltotal = arr[i][1];
         }else if (arr[i][0] != "FORMA PAGAMENTO"){
-          pagmethods.push({formapag : arr[i][0], valor: arr[i][1]});
+          pagmethods.push({forma_pag : arr[i][0], valor: arr[i][1]});
         }
       }
     }
@@ -118,7 +118,7 @@ function mapper(body, chaveNFe){
   var result = {
     id          :  chaveNFe,
     items       :  items,
-    payments    :  {vl_total: vltotal, vl_desc: vldesc ,pag_metodo: pagmethods},
+    payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
     created_at  :  date
   }
   return result;
