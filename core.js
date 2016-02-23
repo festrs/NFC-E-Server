@@ -127,7 +127,7 @@ function mapper(body, chaveNFe){
     created_at  :  new Date(),
     notas       :  [result]
   }
-  return result;
+  return month;
 }
 
 module.exports = core;
