@@ -121,7 +121,12 @@ function mapper(body, chaveNFe){
     payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
     created_at  :  date
   }
-  return result;
+
+  var month = {
+    id          :  date.substring(2,date.length),
+    notas       : [result]
+  }
+  return month;
 }
 
 module.exports = core;
