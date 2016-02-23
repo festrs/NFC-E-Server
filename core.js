@@ -119,7 +119,8 @@ function mapper(body, chaveNFe){
     id          :  chaveNFe,
     items       :  items,
     payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
-    created_at  :  date
+    created_at  :  date,
+    mes         :  date.substring(2,date.length)
   }
 
   var month = {
