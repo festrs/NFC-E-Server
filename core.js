@@ -124,7 +124,8 @@ function mapper(body, chaveNFe){
 
   var month = {
     id          :  date.substring(2,date.length),
-    notas       : [result]
+    created_at  :  new Date(),
+    notas       :  [result]
   }
   return month;
 }
