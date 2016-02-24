@@ -96,17 +96,17 @@ function mapper(body, chaveNFe){
           descricao : arr[i][1],
           qtde      : arr[i][2],
           un        : arr[i][3],
-          vl_unit    : arr[i][4],
-          vl_total   : arr[i][5]
+          vl_unit    : arr[i][4].replaceAll(",","."),
+          vl_total   : arr[i][5].replaceAll(",",".")
         }
         items.push(item);
       }
     }else{
       if(arr[i].length == 2){
         if(arr[i][0].indexOf("Valor descontos") !=-1){
-          vldesc = arr[i][1];
+          vldesc = arr[i][1].replaceAll(",",".");
         } else if(arr[i][0].indexOf("Valor total") !=-1){
-          vltotal = arr[i][1];
+          vltotal = arr[i][1].replaceAll(",",".");
         }else if (arr[i][0] != "FORMA PAGAMENTO"){
           pagmethods.push({forma_pag : arr[i][0], valor: arr[i][1]});
         }
@@ -130,5 +130,10 @@ function mapper(body, chaveNFe){
   }
   return result;
 }
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
 
 module.exports = core;
