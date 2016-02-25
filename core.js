@@ -43,7 +43,6 @@ var core = {
       path: path,
       method: 'GET'
     };
-    console.log(path);
     https.get(options, function(response) {
       var body = '';
       response.on('data', function(chunk) {
@@ -51,7 +50,7 @@ var core = {
       });
       response.on('end', function() {
         parser.write(body);
-        res.json(mapper(body, chaveNFe));
+        res.json(mapper(body, chaveNFe, link));
         arr = [];
       });
     }).on('error', function(e) {
@@ -83,7 +82,7 @@ var parser = new htmlparser.Parser({
   }
 }, {decodeEntities: true});
 
-function mapper(body, chaveNFe){
+function mapper(body, chaveNFe, linkurl){
   var items = [];
   var pagmethods = [];
   var vltotal;
@@ -121,13 +120,8 @@ function mapper(body, chaveNFe){
     items       :  items,
     payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
     created_at  :  date,
-    mes         :  mes
-  }
-
-  var month = {
-    id          :  mes,
-    created_at  :  new Date(),
-    notas       :  [result]
+    mes         :  mes,
+    link        :  linkurl
   }
   return result;
 }
