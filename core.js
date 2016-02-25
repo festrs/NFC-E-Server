@@ -114,17 +114,18 @@ function mapper(body, chaveNFe){
     }
   }
   //finish all mount the result json
-  var date = body.substring(body.search("Data de Emiss")+18,body.search("Data de Emiss")+27)
+  var date = body.substring(body.search("Data de Emiss")+17,body.search("Data de Emiss")+36)
+  var mes = date.substring(3,10)
   var result = {
     id          :  chaveNFe,
     items       :  items,
     payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
     created_at  :  date,
-    mes         :  date.substring(2,date.length)
+    mes         :  mes
   }
 
   var month = {
-    id          :  date.substring(2,date.length),
+    id          :  mes,
     created_at  :  new Date(),
     notas       :  [result]
   }
