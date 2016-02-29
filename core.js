@@ -121,7 +121,8 @@ function mapper(body, chaveNFe, linkurl){
     payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
     created_at  :  date,
     mes         :  mes,
-    link        :  linkurl
+    link        :  linkurl,
+    is_bar_coded:   false
   }
   return result;
 }
