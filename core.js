@@ -95,26 +95,27 @@ function mapper(body, chaveNFe, linkurl){
           descricao : arr[i][1],
           qtde      : arr[i][2],
           un        : arr[i][3],
-          vl_unit    : arr[i][4],
-          vl_total   : arr[i][5]
+          vl_unit    : passToNumber(arr[i][4]),
+          vl_total   : passToNumber(arr[i][5])
         }
         items.push(item);
       }
     }else{
       if(arr[i].length == 2){
         if(arr[i][0].indexOf("Valor descontos") !=-1){
-          vldesc = arr[i][1].replaceAll(",",".");
+          vldesc = passToNumber(arr[i][1]);
         } else if(arr[i][0].indexOf("Valor total") !=-1){
-          vltotal = arr[i][1].replaceAll(",",".");
+          vltotal = passToNumber(arr[i][1]);
         }else if (arr[i][0] != "FORMA PAGAMENTO"){
-          pagmethods.push({forma_pag : arr[i][0], valor: arr[i][1]});
+          pagmethods.push({forma_pag : arr[i][0], valor: passToNumber(arr[i][1])});
         }
       }
     }
   }
   //finish all mount the result json
-  var date = body.substring(body.search("Data de Emiss")+17,body.search("Data de Emiss")+36)
-  var mes = date.substring(3,10)
+  var dateString = body.substring(body.search("Data de Emiss")+17,body.search("Data de Emiss")+36)
+  var date = new Date(dateString.substring(6,10), dateString.substring(3,5)-1, dateString.substring(0,2), dateString.substring(11,13), dateString.substring(14,16), dateString.substring(17,19));
+  var mes = dateString.substring(3,10)
   var result = {
     id          :  chaveNFe,
     items       :  items,
@@ -132,5 +133,11 @@ String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.split(search).join(replacement);
 };
+
+function passToNumber(string){
+  var newNumber = string.replaceAll(".","")
+  newNumber = newNumber.replaceAll(",",".")
+  return newNumber
+}
 
 module.exports = core;
