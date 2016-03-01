@@ -123,8 +123,7 @@ function mapper(body, chaveNFe, linkurl){
     created_at  :  date,
     mes         :  mes,
     link        :  linkurl,
-    is_bar_coded:   false,
-    type_name: "Notas"
+    type_name   :  "Notas"
   }
   return result;
 }
