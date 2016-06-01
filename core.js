@@ -119,12 +119,12 @@ function mapper(body, chaveNFe, linkurl){
   var result = {
     id          :  chaveNFe,
     items       :  items,
-    payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
+    payments    :  { vl_total: vltotal, vl_desc: vldesc , pagmetodos: pagmethods},
     created_at  :  date,
     mes         :  mes,
     link        :  linkurl
   }
-  console.log(result);
+  console.log(print_r(result));
   return result;
 }
 
@@ -139,4 +139,4 @@ function passToNumber(string){
   return newNumber
 }
 
-module.exports = core;
+module.exports = core; 
