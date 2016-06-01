@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/festrs/NFC-E-Server.git"
   },
-  "author": "",
+  "author": "Felipe Dias Pereira",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/festrs/NFC-E-Server/issues"

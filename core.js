@@ -122,9 +122,9 @@ function mapper(body, chaveNFe, linkurl){
     payments    :  {vl_total: vltotal, vl_desc: vldesc ,pagmetodos: pagmethods},
     created_at  :  date,
     mes         :  mes,
-    link        :  linkurl,
-    type_name   :  "Notas"
+    link        :  linkurl
   }
+  console.log(result);
   return result;
 }
 
