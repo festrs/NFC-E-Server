@@ -124,7 +124,7 @@ function mapper(body, chaveNFe, linkurl){
     mes         :  mes,
     link        :  linkurl
   }
-  console.log(print_r(result));
+  console.log(result.toString());
   return result;
 }
 
