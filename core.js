@@ -1,6 +1,6 @@
 var htmlparser = require("htmlparser2");
 var https = require('https');
-var jwt = require('express-jwt');
+var minify = require('html-minifier').minify;
 var arr = [];
 var record = false;
 var itemArray = [];
@@ -9,11 +9,11 @@ var finalRecord = false;
 var core = {
 
   getAllDataFromQRTest: function(req, res){
-    var chaveNFe = "43160245543915000777650120000485121886402924";
+    var chaveNFe = "43160593015006003210651190000448421163150095";
     var options = {
       hostname: 'www.sefaz.rs.gov.br',
       port: 443,
-      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43160245543915000777650120000485121886402924&HML=false&NF=1CA06FD1F',
+      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43160593015006003210651190000448421163150095&HML=false&NF=1CA06FD1F',
       method: 'GET'
     };
 
@@ -92,7 +92,7 @@ function mapper(body, chaveNFe, linkurl){
       if(arr[i].length == 6){
         var item = {
           id        : arr[i][0],
-          descricao : arr[i][1],
+          descricao : minify(arr[i][1], {collapseWhitespace: true}),
           qtde      : arr[i][2],
           un        : arr[i][3],
           vl_unit    : passToNumber(arr[i][4]),
@@ -124,7 +124,6 @@ function mapper(body, chaveNFe, linkurl){
     mes         :  mes,
     link        :  linkurl
   }
-  console.log(result.toString());
   return result;
 }
 
