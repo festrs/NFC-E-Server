@@ -104,12 +104,17 @@ function mapper(body, chaveNFe, linkurl){
         var options = {
           keys: [{
             name: 'descricao',
-            weight: 0.4
+            weight: 0.45
           }]
         };
         var fuse = new Fuse(items, options)
-        if (fuse.search(arr[i][1]).length === 0) {
+        var result = fuse.search(arr[i][1]);
+        if (result.length === 0) {
           items.push(item);  
+        } else {
+          result.forEach(function(entry) {
+              entry.qtde ++
+          });
         }
       }
     }else{
