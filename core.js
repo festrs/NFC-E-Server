@@ -1,6 +1,7 @@
 var htmlparser = require("htmlparser2");
 var https = require('https');
 var minify = require('html-minifier').minify;
+var Fuse = require('fuse.js');
 var arr = [];
 var record = false;
 var itemArray = [];
@@ -9,14 +10,15 @@ var finalRecord = false;
 var core = {
 
   getAllDataFromQRTest: function(req, res){
-    var chaveNFe = "43160593015006003210651190000448421163150095";
+    var chaveNFe = "41141115375991001055650030000000011000000016";
     var options = {
       hostname: 'www.sefaz.rs.gov.br',
       port: 443,
-      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43160593015006003210651190000448421163150095&HML=false&NF=1CA06FD1F',
-      method: 'GET'
+      path: '/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-NFC_2.asp?chaveNFe=43170445543915000777650140002237171657174448&HML=false&NF=1CA06FD1F',
+      method: 'GET',
+      rejectUnauthorized: false
     };
-
+    //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     https.get(options, function(response) {
       var body = '';
       response.on('data', function(chunk) {
@@ -61,7 +63,7 @@ var core = {
 
 var parser = new htmlparser.Parser({
   onopentag: function(name, attribs){
-    if(name === "td" && attribs.class === "NFCDetalhe_Item"){
+    if(name === "td" && attribs.class === "NFCDetalhe_Item" || attribs.class === "NFCDetalhe_Item_Left" || attribs.class === "NFCDetalhe_Item_Right"|| attribs.class === "NFCDetalhe_Item_Center"){
       record = true;
     }
   },
@@ -98,7 +100,17 @@ function mapper(body, chaveNFe, linkurl){
           vl_unit    : passToNumber(arr[i][4]),
           vl_total   : passToNumber(arr[i][5])
         }
-        items.push(item);
+
+        var options = {
+          keys: [{
+            name: 'descricao',
+            weight: 0.4
+          }]
+        };
+        var fuse = new Fuse(items, options)
+        if (fuse.search(arr[i][1]).length === 0) {
+          items.push(item);  
+        }
       }
     }else{
       if(arr[i].length == 2){
