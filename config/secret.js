@@ -1,5 +1,5 @@
 module.exports = function() {
-  return 'SupperDupperSecret';
+  return process.env.ListioAPISecret;
 }
 
 
